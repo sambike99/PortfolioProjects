@@ -204,16 +204,22 @@ WITH
     member_casual
   FROM
     `cyclisticdataanalysis-377116.Trips202201.2022_Dec_data` )
+    
+    
 SELECT
   *
 FROM
   combined_tables_2022
+  
+  
   --Checking for misspellings
 SELECT
   DISTINCT member_casual,
   rideable_type
 FROM
   `cyclisticdataanalysis-377116.Trips202201.2022_Jan_Data`
+  
+  
   --Calculate ride_length in minutes
 UPDATE
   `cyclisticdataanalysis-377116.Trips202201.combined_bike_data_2022`
@@ -221,6 +227,8 @@ SET
   ride_length = TIMESTAMP_DIFF(ended_at, started_at, MINUTE)
 WHERE
   TRUE
+  
+  
   --Extract day of the week from started_at
 UPDATE
   `cyclisticdataanalysis-377116.Trips202201.combined_bike_data_2022`
@@ -230,7 +238,9 @@ SET
       started_at) AS STRING)
 WHERE
   TRUE
-  -- --Extract month from ride start date
+  
+  
+  --Extract month from ride start date
 UPDATE
   `cyclisticdataanalysis-377116.Trips202201.combined_bike_data_2022`
 SET
@@ -239,6 +249,8 @@ SET
       started_at) AS STRING)
 WHERE
   TRUE
+  
+  
   --Check where ride length is negative
 SELECT
   *
@@ -246,19 +258,23 @@ FROM
   `cyclisticdataanalysis-377116.Trips202201.combined_bike_data_2022` AS combined_data
 WHERE
   ride_length <= 0
+  
+  
+  
   --Remove those rows
 DELETE
 FROM
   `cyclisticdataanalysis-377116.Trips202201.combined_bike_data_2022` AS combined_data
 WHERE
   ride_length <= 0
+  
+  
   -- --Select all users who have bikes more than 24 hours before returning
 SELECT
   member_casual,
   COUNT(member_casual) AS total_riders,
-  AVG(ride_length/1440) AS Average_Ride_length,
-  --in days
-FROM
+  AVG(ride_length/1440) AS Average_Ride_length, --in days
+  FROM
   `cyclisticdataanalysis-377116.Trips202201.combined_bike_data_2022` AS combined_data
 WHERE
   ride_length > 1440
@@ -266,13 +282,14 @@ WHERE
   AND end_lng IS NOT NULL
 GROUP BY
   member_casual
+  
+  
   --Select all users who have bikes less than 24 hours before returning
 SELECT
   member_casual,
   COUNT(member_casual) AS total_riders,
-  AVG(ride_length) AS Average_Ride_length,
-  --in minutes
-FROM
+  AVG(ride_length) AS Average_Ride_length,  --in minutes
+ FROM
   `cyclisticdataanalysis-377116.Trips202201.combined_bike_data_2022` AS combined_data
 WHERE
   ride_length < 1440
@@ -280,6 +297,8 @@ WHERE
   AND end_lng IS NOT NULL
 GROUP BY
   member_casual
+  
+  
   --Total riders based on months in a year
 SELECT
   COUNT(member_casual) AS total_riders,
@@ -290,6 +309,8 @@ GROUP BY
   month
 ORDER BY
   month
+  
+  
   --Total casual  riders based on months of year
 SELECT
   COUNT(member_casual) AS total_riders,
@@ -302,6 +323,8 @@ GROUP BY
   month
 ORDER BY
   month
+  
+  
   --Total member riders based on day of week
 SELECT
   COUNT(member_casual) AS total_riders,
@@ -312,7 +335,8 @@ WHERE
   member_casual = "member"
 GROUP BY
   day_of_week
-  --ORDER BY day_of_week
+  
+  
   --Query to see how many member riders start at differnt startions
 SELECT
   COUNT(*) AS riders,
@@ -330,6 +354,8 @@ GROUP BY
   start_station_name
 ORDER BY
   riders DESC
+  
+  
   --Pecentage of member vs casual riders in the dataset
 SELECT
   DISTINCT member_casual,
@@ -343,6 +369,8 @@ FROM (
     `cyclisticdataanalysis-377116.Trips202201.combined_bike_data_2022`
   GROUP BY
     member_casual )
+    
+    
   --Pecentage of bikes preffered by members
 SELECT
   DISTINCT rideable_type,
